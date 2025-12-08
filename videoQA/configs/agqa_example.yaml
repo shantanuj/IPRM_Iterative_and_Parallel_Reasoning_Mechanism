@@ -1,0 +1,96 @@
+##0.7 worked decently well; now try 0.5
+COMET:
+  EXPERIMENT_NAME: "M6t6 Distil roberta bs 128"
+  PROJECT_NAME: "AGQA_nonGT_inputs"
+  
+SAVE_DIRECTORY: '/data/user_data/sjaiswa3/iprm_ckpts/AGQA_Models/IPRM_M6_T6/'
+
+#LOAD: True
+#LOAD_PATH: '/data/usrdata/shan/STAR_VideoQA_models_nonGT_inputs/0_BEST_seed91_iprm_m6_t9_256pbboxembedpersonlabelembd_LSTMauxprojs_seed6_concat_classifier_indv_option_BCEloss_0.5_OBJ_THRESH//best_model.model'
+
+DATALOADER:
+  BATCH_SIZE: 192
+  EVAL_BATCH_SIZE: 256
+  NUM_SAMPLE_FRAMES: 32
+  DO_BATCH_WISE_MAX_OBJS: False
+  MIN_REL_SCORE_THRESH: 0.9
+  MIN_OBJ_SCORE_THRESH: 0.5 #0.8
+  OBJ_PROPOSALS_PATH: "/data/usrdata/shan/STTran_VG_charades_output/Full_Combined_Final_predicted_obj_bboxes_objthresh0.3_relthresh0.5.pkl"
+  PERSON_PROPOSALS_PATH: "/data/usrdata/shan/STTran_VG_charades_output/Full_Combined_Final_predicted_person_bboxes.pkl"
+
+  
+SOLVER:
+  EPOCHS: 40
+  LANG_ENC_LR: 1e-4
+  FACTOR: 0.75
+  LR: 0.0001
+  PATIENCE: 1
+
+
+VLM:
+    PROCESS_EACH_OPTION_INDEPENDENTLY: True
+    MODULE_TYPE: "rmam"
+    USE_PRETRAINED_LANG_ENCODER: True
+    PRETRAINED_LANG_ENCODER_PATH: '/data/usrdata/shan/BLIPv1_model_components/distil_roberta_base_encoder.pth'
+    PRETRAINED_LANG_TOKENIZER_PATH: '/data/usrdata/shan/BLIPv1_model_components/distil_roberta_base_tokenizer.pth'
+    #PRETRAINED_LANG_EMBEDDING_PATH: "/data/usrdata/shan/BLIPv1_model_components/vqav2_embeddings.pth"
+    #PRETRAINED_LANG_TOKENIZER_PATH: '/data/usrdata/shan/BLIPv1_model_components/vqav2_tokenizer.pth'
+    
+    REMOVE_FIRST_AND_LAST_SPECIAL_TOKENS_PRETRAINED_LANG_ENCODER: False
+    ADD_AUX_LANG_TOKEN: True
+    
+    LANG_SUMMARY_REP_DROPOUT: 0.08
+    VIS_STEM_DROPOUT: 0.15
+    CLASSIFIER_TYPE: 'concat_lang_and_result'
+    
+    SHARE_QUESTION_AND_OPTION_ENCODER: True
+    SHARE_QUESTION_AND_OPTION_PROJS_METHOD: 'share_options'  #share_options, share_question_and_options, else unique for every option+q
+    ADD_LANG_AND_CHOICE_POSITIONAL_EMBEDS: False
+    COMBINE_QUES_AND_OPTION_SUMMARY_FOR_MODULE: True
+    CONCAT_QUESTION_AND_OPTION_LANG_REPS_FOR_MODULE: True
+    
+    USE_FRAME_POS_EMBEDS: True
+        
+    PERSON_BBOX_LATENT_DIMS: 256 #128
+    PERSON_BBOX_LATENT_DROP: 0.15
+    USE_PERSON_EMBEDDING: True
+    PERSON_COORDS_LATENT_METHOD: 'indv_projs_then_sum' #indv_projs_then_sum, concat_coords_then_proj
+    PERSON_COORDS_LATENT_DIMS: 256
+    PERSON_COORDS_LATENT_DROP: 0.2
+    
+    OBJ_BBOX_LATENT_DIMS: 128
+    OBJ_BBOX_LATENT_DROP: 0.15
+    OBJ_LABEL_LATENT_DIMS: 128
+    OBJ_LABEL_LATENT_DROP: 0.15
+    
+    USE_COMBINED_OBJ_REL_EMBED: False
+    OBJ_REL_EMBD_DIMS: 256
+    OBJ_REL_LATENT_DIMS: 128
+    OBJ_REL_LATENT_DROP: 0.15
+    UNIFORM_INIT_OBJ_RELS_EMBED: True
+    
+    CLASSIFIER_DROPOUT: 0.15
+    
+IPRM:
+    NUM_MEMORY_TOKENS: 6
+    NUM_COMPUTATION_STEPS: 6
+    
+    LANG_BLOCK_NONLIN: 'tanh'
+    LANG_BLOCK_MLP_DROP: 0.1
+    
+    VIS_BLOCK_DROP: 0.15
+    VIS_BLOCK_NONLIN: 'elu'
+    REDUCTION_R: 2
+    
+    
+    MEMORY_RES_POOL_METHOD: 'lang_cuml_query_op'
+    MEMORY_ATT_WINDOW_LEN: 2
+    
+    
+    
+
+  
+
+
+
+  #FEATURES_PATH: "/data/usrdata/shan/CLEVR_feats/features_272x272/"

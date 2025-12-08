@@ -1,0 +1,17 @@
+*wandb/*
+*ckpts/*
+*/__pycache__/*
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+.idea/
+*.log

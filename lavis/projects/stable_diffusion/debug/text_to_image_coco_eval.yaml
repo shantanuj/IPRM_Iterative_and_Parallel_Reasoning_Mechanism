@@ -1,0 +1,57 @@
+model:
+  arch: stable_diffusion
+  model_type: v1-4
+
+datasets:
+  coco_text_to_image:
+    vis_processor:
+        train:
+          name: "stable_diffusion_image_train"
+          image_size: 512
+        eval:
+          name: "stable_diffusion_image_eval"
+          image_size: 512
+    text_processor:
+        train:
+          name: "stable_diffusion_text"
+        eval:
+          name: "stable_diffusion_text"
+    # num_eval_samples: 30000
+    # num_eval_samples: 3000
+    num_eval_samples: 100
+
+run:
+  task: image_generation
+
+  reference_dir: /export/home/.cache/lavis/coco/images/val2014_resized
+  # height: 256
+  # width: 256
+  # num_inference_step: 250
+  # guidance_scale: 1.5
+
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 1e-5
+  min_lr: 1e-8
+  warmup_lr: 1e-8
+
+  weight_decay: 0.05
+  max_epoch: 10
+  batch_size_train: 2
+  batch_size_eval: 4
+  num_workers: 4
+  warmup_steps: 1000
+
+  seed: 42
+  output_dir: "output/stable_diffusion/text_to_image_coco"
+  checkpoint: ""
+
+  evaluate: False
+  train_splits: ["train"]
+  valid_splits: ["val"]
+
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: True
+  amp: True

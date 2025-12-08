@@ -1,0 +1,76 @@
+model:
+  arch: zerobooth_mlm
+  model_type: base
+
+  diffusion_model_args:
+    # train_unet: True
+    train_unet: False
+
+datasets:
+  # laion:
+  #   type: aesthetics-v1-en-51m
+
+  imagenet:
+    vis_processor:
+        train:
+          name: "zerobooth_image"
+
+          inp_image_size: 392
+          tgt_image_size: 512
+
+        eval:
+          name: "zerobooth_image"
+
+          inp_image_size: 392
+          tgt_image_size: 512
+        #   name: "stable_diffusion_image_eval"
+        #   image_size: 512
+    text_processor:
+        train:
+          name: "blip_caption"
+
+        eval:
+          name: "blip_caption"
+    # num_eval_samples: 30000
+    # num_eval_samples: 3000
+    # num_eval_samples: 100
+
+run:
+  runner: runner_iter
+
+  task: image_generation
+
+  max_iters: 4e6
+  iters_per_inner_epoch: 2e5
+  accum_grad_iters: 1
+
+  # reference_dir: /export/home/.cache/lavis/coco/images/val2014_resized
+  # height: 256
+  # width: 256
+  # num_inference_step: 250
+  # guidance_scale: 1.5
+
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 2e-03
+  min_lr: 0
+
+  weight_decay: 0.01
+  batch_size_train: 2
+  batch_size_eval: 4
+  num_workers: 4
+  warmup_steps: 1000
+
+  seed: 42
+  output_dir: "output/debug/zerobooth"
+  checkpoint: ""
+
+  evaluate: False
+  train_splits: ["val"]
+  # valid_splits: ["val"]
+
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: True
+  amp: False
