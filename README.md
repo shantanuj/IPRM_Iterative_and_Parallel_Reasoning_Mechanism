@@ -10,7 +10,7 @@ The codebase and associated experiments are performed in following environment:
 - OS: Linux 5.15.0-76-generic (Ubuntu 20.04.4 LTS, x86_64)
 - Python: 3.8.10 (GCC 9.4.0)
 - GPU: NVIDIA A40 and NVIDIA A6000
-- Python packages/toolkits: See [`requirements.txt`](requirements.txt). Incase of errors with lavis library please use [`requirements_alt.txt`](requirements_alt.txt)
+- Python packages/toolkits: See [`requirements.txt`](requirements.txt). Incase of errors with lavis library please use [`requirements_alt.txt`](requirements_alt.txt) (or see modified attached lavis code).
 
 To run code, ideally create a virtual/conda environment and install requirements listed in [`requirements.txt`](requirements.txt) by running:
 ```bash
